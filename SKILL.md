@@ -10,20 +10,71 @@ This skill helps the founder plan and write their weekly LinkedIn content mix. I
 
 ## Setup check
 
-When this skill is first invoked, check if the hooks generator is installed:
+When this skill is first invoked, run both checks before doing anything else.
+
+**1. Hooks generator**
 
 ```bash
 ls ~/linkedin-hooks/main.py 2>/dev/null
 ```
 
-If the file doesn't exist, tell the user and offer to set it up:
+If missing, offer to install it:
 
 ```bash
 git clone https://github.com/lucagalvani-galtea/linkedin-hooks.git ~/linkedin-hooks
 pip install typer rich
 ```
 
-Only run the setup if the user confirms. Once installed, proceed normally. Don't repeat this check on subsequent invocations in the same session.
+Only run if the user confirms.
+
+**2. Memory file**
+
+```bash
+cat ~/linkedin-memory.md 2>/dev/null
+```
+
+If the file exists, load it silently — use the voice & style notes when drafting and do not ask for writing samples again.
+
+If the file does not exist, ask:
+
+> "Do you have any existing LinkedIn posts or writing samples I can learn your voice from? Paste them here, or press Enter to skip."
+
+If they share samples, extract voice & style patterns (sentence length, vocabulary, structural habits, what they avoid) and create `~/linkedin-memory.md` with the structure below. If they skip, create the file with empty sections so it's ready for confirmed posts.
+
+Do not repeat this check on subsequent invocations in the same session.
+
+## Memory file format
+
+Location: `~/linkedin-memory.md`
+
+```markdown
+# LinkedIn Writing Memory
+
+## Voice & Style Notes
+<!-- Extracted from writing samples. Updated when new samples are shared. -->
+
+
+## Confirmed Posts
+<!-- Appended after each post the user confirms as done. -->
+```
+
+### How to update the memory file
+
+**After extracting voice notes from samples:**
+Append bullet points under `## Voice & Style Notes`. Focus on patterns that are specific and actionable — sentence rhythm, word choices they favour or avoid, structural habits, recurring angles. Not generic observations.
+
+**After a post is confirmed:**
+When the user says a post is done, approved, or ready to publish, append it under `## Confirmed Posts`:
+
+```markdown
+### YYYY-MM-DD — [post type]
+[full post text]
+```
+
+Use today's date. Always append — never overwrite existing entries.
+
+**When new samples are shared mid-session:**
+Extract additional patterns and merge them into `## Voice & Style Notes`.
 
 ## Weekly Content Mix
 
@@ -117,12 +168,12 @@ Tone definitions:
 - **Vulnerable** — admits something most wouldn't say out loud, honest about being wrong or slow
 - **Authoritative** — leads with specifics and evidence, precise numbers, no false modesty
 
-### Step 5 — Iterate
+### Step 5 — Iterate and confirm
 
 After sharing the draft:
 - Ask if the tone, hook, or body needs adjusting
 - Offer to regenerate just the hook using the hooks generator if the opening isn't strong enough
-- Suggest saving the post to a weekly content file if the user tracks their drafts
+- When the user is happy with the post, ask: "Want me to save this to memory?" — if yes, append it to `~/linkedin-memory.md` under `## Confirmed Posts` with today's date and post type
 
 ## Post type templates
 
