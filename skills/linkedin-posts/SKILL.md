@@ -78,7 +78,7 @@ Extract additional patterns and merge them into `## Voice & Style Notes`.
 
 ## Weekly Content Mix
 
-Each week targets five post types. When the user hasn't specified, ask what's happening this week and suggest which slots are most natural to fill first.
+Each week targets five post types.
 
 | Slot | Type | Best source material |
 |---|---|---|
@@ -90,11 +90,82 @@ Each week targets five post types. When the user hasn't specified, ask what's ha
 
 ## Workflow
 
-### Step 1 — Identify the post type
+### Step 1 — Identify the post type or mine the week
 
-If the user hasn't specified, ask:
-- Which slot they want to fill (or show the list above)
-- What's happening this week that fits that slot
+Ask the user:
+
+> "Do you already have a topic in mind, or would you like me to interview you about your week to find one?"
+
+**If they have a topic:** ask which slot it fits and proceed to Step 2.
+
+**If they don't have a topic** (or say things like "I don't know what to write", "nothing interesting happened", "help me find content"): run the Content Mine interview below, then use the output to pick the best-fit slot and proceed to Step 2 with the chosen idea as the raw material.
+
+---
+
+## Content Mine — Weekly Extraction Interview
+
+Run this when the user doesn't have a topic ready. The goal is to surface content ideas from their real work week. Most professionals sit on a goldmine of insights but don't see it because it all feels "obvious" to them. Your job is to help them see what their audience would find valuable.
+
+By the end, the user should feel a shift: from "I have nothing to say" to "I actually have too much."
+
+### Interview rules
+
+- Ask **one question at a time**. Acknowledge their answer briefly before moving on.
+- If they give a rich answer, flag the gold: "There's definitely a post in there." Then move on.
+- If they give a flat "nothing really" answer, probe once with a more specific version. If still nothing, move on. Never push twice.
+- Push for specifics. If they say "I had a tough conversation," ask what made it tough, what was said, what happened. Generic answers produce generic ideas.
+- **Budget: ~12 questions total** (8 starters + ~4 follow-ups). Don't burn follow-ups on dry territories.
+- If the user types **STOP** at any point, immediately skip to the output with whatever material you have.
+
+### The 8 territories
+
+**1. Conversations**
+"Think about the conversations you had this week — with colleagues, clients, your team. Did any of them spark a thought? Maybe a question someone asked that surprised you, or a pattern you noticed across multiple conversations?"
+
+**2. Events & News**
+"What actually happened at work this week? Any meetings that mattered, decisions made, launches, shifts in direction?"
+
+**3. The Hard Problem**
+"What was the hardest thing you dealt with this week, professionally? Walk me through it — what happened and how did you handle it?"
+
+**4. Processes & Tactics**
+"Did you create or update any documents, processes, templates, or workflows? Anything you built that helped you or your team work better?"
+
+**5. Learning & Mind Changes**
+"Did you learn something new this week? Or change your mind about something you used to believe?"
+
+**6. Contrarian Take**
+"Was there a 'best practice' or common piece of advice you heard this week that you actually disagree with?"
+
+**7. Values & Boundaries**
+"Did you say 'No' to anything this week? A project, a client, a meeting, a request? What was it and why?"
+
+**8. Curation**
+"What's one thing you read, watched, or listened to this week that you found yourself telling someone else about?"
+
+### Content Mine output
+
+Once the interview is done (or STOP), generate **5 content ideas** using this structure for each:
+
+```
+## Idea #[N]: [Hook — a phrase that could open the post]
+
+- **Source:** [Specific moment from the interview]
+- **Target audience:** [Who would care — be specific]
+- **The angle:** [One sentence: the post's core message]
+- **Content type:** [Case Study | Contrarian Take | Tactical How-To | Personal/Vulnerable | Curation | Observation]
+- **Best slot:** [Which of the 5 weekly slots this fits]
+```
+
+**Rules for the output:**
+- Exactly 5 ideas. Nothing after Idea #5 — no bonus ideas, next steps, or strategy sections.
+- At least 3 different content types across the 5 ideas.
+- Every idea must reference something the user actually said — no invented details.
+- The hook must be strong enough to stop a scroll.
+
+After presenting the 5 ideas, ask: "Which of these do you want to turn into a post?" Then proceed to Step 2 with that idea as the raw material.
+
+---
 
 ### Step 2 — Gather raw material
 
