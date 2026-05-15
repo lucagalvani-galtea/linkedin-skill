@@ -1,18 +1,56 @@
 ---
 name: linkedin-posts
-description: "Help a founder plan and write LinkedIn posts following a weekly content mix: company culture, personal brand, AI landscape, reposts, and product updates."
+description: "Help Jorge (founder) or Luca (marketing hire) plan and write LinkedIn posts following a weekly content mix: company culture, personal brand, AI landscape, reposts, and product updates."
 when_to_use: "Invoke when the user wants to write, plan, or brainstorm LinkedIn posts. Trigger phrases include: linkedin post, write a post, post ideas, weekly content, founder post, what should I post."
 ---
 
 # LinkedIn Posts
 
-This skill helps the founder plan and write their weekly LinkedIn content mix. It covers all five post types, drafts full posts (not just hooks), and integrates with the local hooks generator at `~/linkedin-hooks/` when a strong opening is needed.
+This skill helps Jorge (Founder & CEO) or Luca (First Marketing Hire) plan and write their weekly LinkedIn content mix. It covers all five post types, drafts full posts (not just hooks), and integrates with the local hooks generator at `~/linkedin-hooks/` when a strong opening is needed.
+
+## Personas
+
+Two personas are supported. Each has its own memory file, content focus, and interview framing.
+
+### Jorge — Founder & CEO of Galtea
+- Memory file: `~/linkedin-memory-jorge.md`
+- Audience: AI builders, founders, and product teams
+- Content focus: company vision, founder journey, product milestones, AI landscape takes from a builder's perspective
+
+### Luca — First Marketing Hire at Galtea
+- Memory file: `~/linkedin-memory-luca.md`
+- Audience: Marketers, GTM practitioners, and AI-curious builders
+- Content focus: marketing craft, GTM experiments, growth lessons, AI's impact on marketing and distribution
+
+---
 
 ## Setup check
 
-When this skill is first invoked, run both checks before doing anything else.
+When this skill is first invoked, run all three checks before doing anything else.
 
-**1. Hooks generator**
+**1. Persona selection**
+
+```bash
+cat ~/linkedin-persona 2>/dev/null
+```
+
+If the file exists, load that persona silently — do not ask. All subsequent steps use it.
+
+If the file does not exist, ask once:
+
+> "Who are we writing for — Jorge or Luca?"
+
+Save the answer immediately:
+
+```bash
+echo "[jorge|luca]" > ~/linkedin-persona
+```
+
+If the user says something like "me" or "myself", save `luca`.
+
+**Switching personas:** If the user explicitly asks to switch ("write for Jorge instead", "switch to Luca"), update `~/linkedin-persona` with the new value and reload the correct memory file. No need to ask again after that.
+
+**2. Hooks generator**
 
 ```bash
 ls ~/linkedin-hooks/main.py 2>/dev/null
@@ -27,28 +65,41 @@ pip install typer rich
 
 Only run if the user confirms.
 
-**2. Memory file**
+**3. Memory file**
+
+Load the persona's memory file:
 
 ```bash
-cat ~/linkedin-memory.md 2>/dev/null
+cat ~/linkedin-memory-[persona].md 2>/dev/null
 ```
 
-If the file exists, load it silently — use the voice & style notes when drafting and do not ask for writing samples again.
+Replace `[persona]` with `jorge` or `luca` based on the selection above.
+
+If the file exists, load it silently — use the persona profile, voice & style notes when drafting, and do not ask for writing samples again.
 
 If the file does not exist, ask:
 
 > "Do you have any existing LinkedIn posts or writing samples I can learn your voice from? Paste them here, or press Enter to skip."
 
-If they share samples, extract voice & style patterns (sentence length, vocabulary, structural habits, what they avoid) and create `~/linkedin-memory.md` with the structure below. If they skip, create the file with empty sections so it's ready for confirmed posts.
+If they share samples, extract voice & style patterns (sentence length, vocabulary, structural habits, what they avoid) and create the file with the structure below. If they skip, create the file with empty sections so it's ready for confirmed posts.
 
 Do not repeat this check on subsequent invocations in the same session.
 
+---
+
 ## Memory file format
 
-Location: `~/linkedin-memory.md`
+**Jorge:** `~/linkedin-memory-jorge.md`
+**Luca:** `~/linkedin-memory-luca.md`
 
 ```markdown
-# LinkedIn Writing Memory
+# LinkedIn Writing Memory — [Name]
+
+## Persona Profile
+- **Name:** [Name]
+- **Role:** [Role at Galtea]
+- **Audience:** [Primary LinkedIn audience]
+- **Content focus:** [Key angles and topics]
 
 ## Voice & Style Notes
 <!-- Extracted from writing samples. Updated when new samples are shared. -->
@@ -56,6 +107,24 @@ Location: `~/linkedin-memory.md`
 
 ## Confirmed Posts
 <!-- Appended after each post the user confirms as done. -->
+```
+
+Pre-fill `## Persona Profile` when creating the file:
+
+**For Jorge:**
+```
+- **Name:** Jorge
+- **Role:** Founder & CEO at Galtea
+- **Audience:** AI builders, founders, and product teams
+- **Content focus:** Company vision, founder journey, product milestones, AI landscape takes
+```
+
+**For Luca:**
+```
+- **Name:** Luca
+- **Role:** First Marketing Hire at Galtea
+- **Audience:** Marketers, GTM practitioners, AI-curious builders
+- **Content focus:** Marketing craft, GTM experiments, growth lessons, AI's impact on marketing
 ```
 
 ### How to update the memory file
@@ -76,6 +145,8 @@ Use today's date. Always append — never overwrite existing entries.
 **When new samples are shared mid-session:**
 Extract additional patterns and merge them into `## Voice & Style Notes`.
 
+---
+
 ## Weekly Content Mix
 
 Each week targets five post types.
@@ -87,6 +158,8 @@ Each week targets five post types.
 | 3 | **AI landscape** | Reaction to a specific event, prediction on AI's future |
 | 4 | **Repost** | Useful resource, or an ICP's post worth amplifying |
 | 5 | **Product** | Launch, new feature, new article/resource, infographic/carousel |
+
+---
 
 ## Workflow
 
@@ -147,25 +220,53 @@ By the end, the user should feel a shift: from "I have nothing to say" to "I act
 
 ### The 6 questions
 
-Each question maps directly to one or more post slots.
+Each question maps directly to one or more post slots. Use the variant that matches the active persona.
+
+---
 
 **1. Product**
-"Anything ship, launch, or change at Galtea this week? New feature, article, milestone — anything worth telling your audience about?"
+
+*Jorge:* "Anything ship, launch, or change at Galtea this week? New feature, article, milestone — anything worth telling your audience about?"
+
+*Luca:* "Anything you shipped, tested, or launched on the marketing side this week? A campaign, a piece of content, an experiment — anything worth talking about?"
+
+---
 
 **2. Company culture**
-"Any team news this week? New hire, a win worth celebrating, an event, a partnership — anything that happened with the people around you?"
+
+*Both:* "Any team news this week? New hire, a win worth celebrating, an event, a partnership — anything that happened with the people around you?"
+
+---
 
 **3. Personal brand (work)**
-"What was the hardest or most interesting thing you dealt with at work this week? A decision, a conversation, a problem — walk me through it."
+
+*Jorge:* "What was the hardest or most interesting thing you dealt with at work this week? A decision, a conversation, a problem — walk me through it."
+
+*Luca:* "What was the most interesting marketing or GTM challenge you worked on this week? A message that wasn't landing, a test you ran, a decision you made — walk me through it."
+
+---
 
 **4. Personal brand (life)**
-"Anything happen outside work this week — something you did, experienced, or observed — that made you think differently about your work or the world?"
+
+*Both:* "Anything happen outside work this week — something you did, experienced, or observed — that made you think differently about your work or the world?"
+
+---
 
 **5. AI landscape**
-"What's one thing you read, heard, or reacted to in AI this week — an article, a product, a take — that you actually had an opinion on?"
+
+*Jorge:* "What's one thing you read, heard, or reacted to in AI this week — an article, a product, a take — that you actually had an opinion on?"
+
+*Luca:* "What's one thing in AI you reacted to this week — especially anything changing how marketing, distribution, or GTM works — that you actually had a take on?"
+
+---
 
 **6. Repost / curation**
-"Anything you came across this week — a post, a resource, a tool — that you'd recommend to the people you're trying to reach?"
+
+*Jorge:* "Anything you came across this week — a post, a resource, a tool — that you'd recommend to the people you're trying to reach?"
+
+*Luca:* "Anything you came across this week — a marketing framework, a growth case study, an AI tool — that you'd recommend to other marketers or builders?"
+
+---
 
 ### Content Mine output
 
@@ -211,13 +312,13 @@ If the post is on a topic the user brought in directly, ask short targeted quest
 
 **AI landscape**
 - The specific event or article being reacted to (link or title)
-- The founder's actual opinion — agreement/disagreement and why
+- The persona's actual opinion — agreement/disagreement and why
 - What they think will happen next (the prediction, not the hedge)
 
 **Repost**
 - The original post or resource URL/author
 - Why this is valuable for their audience specifically
-- Optional: a short intro line the founder wants to add
+- Optional: a short intro line the persona wants to add
 
 **Product**
 - What launched or changed — one concrete thing
@@ -250,7 +351,7 @@ Or draft a hook directly using the behavioral levers below.
 
 ### Step 4 — Tone
 
-Default tone by post type unless the founder specifies otherwise:
+Default tone by post type unless the persona specifies otherwise:
 
 | Post type | Default tone |
 |---|---|
@@ -272,10 +373,12 @@ Tone definitions:
 After sharing the draft:
 - Ask if the tone, hook, or body needs adjusting
 - Offer to regenerate just the hook using the hooks generator if the opening isn't strong enough
-- When the user approves, save it to `~/linkedin-memory.md` under `## Confirmed Posts` with today's date and post type
+- When the user approves, save it to the persona's memory file under `## Confirmed Posts` with today's date and post type
 - Then immediately move to the next post in the week plan: "Post [N] done. Ready for post [N+1]? Here's what we planned: [slot] — [hook]"
 
 Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 polished one.
+
+---
 
 ## Post type templates
 
@@ -304,7 +407,7 @@ Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 pol
 ```
 [The event or claim being reacted to — specific, not vague]
 
-[The founder's actual position — disagree, agree, nuance — one sentence]
+[The persona's actual position — disagree, agree, nuance — one sentence]
 
 [Why — the reasoning, compressed. What this means going forward.]
 ```
@@ -314,7 +417,7 @@ Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 pol
 ```
 [One line on why this is worth reading — specific, not "great post"]
 
-[One-sentence context for the founder's audience]
+[One-sentence context for the persona's audience]
 
 → [Author name or link]
 ```
@@ -331,6 +434,8 @@ Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 pol
 [Link or CTA — or nothing if it speaks for itself]
 ```
 
+---
+
 ## Hooks cheat sheet (quick reference)
 
 Use these when drafting hooks without running the generator:
@@ -342,6 +447,8 @@ Use these when drafting hooks without running the generator:
 | Identity mirroring | "The reason [group] struggles with X isn't [obvious reason]." |
 | Pattern interrupt | "[Conventional wisdom]. [One-sentence reframe]." |
 | Competence signal | "Here's the [X]-step framework for [hard thing]." |
+
+---
 
 ## Post strategy layer — Perspective / Proof / Promo
 
@@ -383,6 +490,8 @@ When helping plan the week, aim for:
 
 If the user has a launch or wants inbound leads, prioritize the Promo slot. If they're early-stage building an audience, weight toward Perspective.
 
+---
+
 ## What to avoid
 
 - Generic culture posts ("So proud of our amazing team!")
@@ -393,9 +502,13 @@ If the user has a launch or wants inbound leads, prioritize the Promo slot. If t
 - Promo posts with no CTA or too many ideas
 - Any hook that could have been written by anyone
 
+---
+
 ## Notes
 
 - The hooks generator lives at `~/linkedin-hooks/` — use it when the opening isn't landing
-- The founder's company is Galtea (AI product testing and evaluation platform)
-- Audience: AI builders, founders, and product teams
+- Both personas are writing about Galtea (AI product testing and evaluation platform)
+- Jorge's audience: AI builders, founders, and product teams
+- Luca's audience: Marketers, GTM practitioners, and AI-curious builders
 - Weekly cadence: aim for all 5 slots, but 3 strong posts beat 5 weak ones
+- Memory files: `~/linkedin-memory-jorge.md` and `~/linkedin-memory-luca.md`
