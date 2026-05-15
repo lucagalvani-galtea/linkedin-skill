@@ -1,26 +1,22 @@
 ---
 name: linkedin-posts
-description: "Help Jorge (founder) or Luca (marketing hire) plan and write LinkedIn posts following a weekly content mix: company culture, personal brand, AI landscape, reposts, and product updates."
-when_to_use: "Invoke when the user wants to write, plan, or brainstorm LinkedIn posts. Trigger phrases include: linkedin post, write a post, post ideas, weekly content, founder post, what should I post."
+description: "Help any professional plan and write LinkedIn posts following a weekly content mix: company culture, personal brand, AI landscape, reposts, and product updates. Supports multiple personas, each with their own voice profile."
+when_to_use: "Invoke when the user wants to write, plan, or brainstorm LinkedIn posts. Trigger phrases include: linkedin post, write a post, post ideas, weekly content, what should I post."
 ---
 
 # LinkedIn Posts
 
-This skill helps Jorge (Founder & CEO) or Luca (First Marketing Hire) plan and write their weekly LinkedIn content mix. It covers all five post types, drafts full posts (not just hooks), and integrates with the local hooks generator at `~/linkedin-hooks/` when a strong opening is needed.
+This skill helps any professional plan and write their weekly LinkedIn content. It supports multiple personas — each with their own voice profile, memory file, and interview framing — and integrates with the local hooks generator at `~/linkedin-hooks/` when a strong opening is needed.
 
-## Personas
+## Persona System
 
-Two personas are supported. Each has its own memory file, content focus, and interview framing.
+Personas are created on first run and stored as memory files. Each persona has:
+- A name and role
+- A company and what it does
+- A target LinkedIn audience
+- A content focus (the main angles and topics they write about)
 
-### Jorge — Founder & CEO of Galtea
-- Memory file: `~/linkedin-memory-jorge.md`
-- Audience: AI builders, founders, and product teams
-- Content focus: company vision, founder journey, product milestones, AI landscape takes from a builder's perspective
-
-### Luca — First Marketing Hire at Galtea
-- Memory file: `~/linkedin-memory-luca.md`
-- Audience: Marketers, GTM practitioners, and AI-curious builders
-- Content focus: marketing craft, GTM experiments, growth lessons, AI's impact on marketing and distribution
+Multiple personas are supported. The active one is tracked in `~/linkedin-persona`.
 
 ---
 
@@ -34,21 +30,26 @@ When this skill is first invoked, run all three checks before doing anything els
 cat ~/linkedin-persona 2>/dev/null
 ```
 
-If the file exists, load that persona silently — do not ask. All subsequent steps use it.
+If the file exists, read the slug and load `~/linkedin-memory-[slug].md` silently. Proceed without asking.
 
-If the file does not exist, ask once:
+If the file does not exist, run the **persona creation flow**:
 
-> "Who are we writing for — Jorge or Luca?"
+> "Let's set you up. I'll ask a few questions to build your persona profile — this only happens once.
+>
+> 1. Who are we writing for? (name)
+> 2. What's their role? (e.g. Founder & CEO, Head of Marketing)
+> 3. What's their company and what does it do? (e.g. Acme — B2B SaaS for HR teams)
+> 4. Who's their LinkedIn audience? (e.g. HR leaders and SaaS founders)
+> 5. What are their main content angles? (e.g. founder journey, product launches, AI takes)"
 
-Save the answer immediately:
+Ask all five questions at once. Wait for answers, then:
+- Derive a slug from their first name (lowercase, no spaces): e.g. "Sarah Chen" → `sarah`
+- Save the slug to `~/linkedin-persona`
+- Create `~/linkedin-memory-[slug].md` with the persona profile pre-filled (see Memory file format)
 
-```bash
-echo "[jorge|luca]" > ~/linkedin-persona
-```
+**Adding a new persona:** If the user says "add a persona" or "write for someone else", run the creation flow again and update `~/linkedin-persona` to the new slug.
 
-If the user says something like "me" or "myself", save `luca`.
-
-**Switching personas:** If the user explicitly asks to switch ("write for Jorge instead", "switch to Luca"), update `~/linkedin-persona` with the new value and reload the correct memory file. No need to ask again after that.
+**Switching personas:** If the user explicitly asks to switch ("write for [name] instead"), update `~/linkedin-persona` to that slug and load their memory file. Run the creation flow if that persona doesn't exist yet.
 
 **2. Hooks generator**
 
@@ -56,32 +57,21 @@ If the user says something like "me" or "myself", save `luca`.
 ls ~/linkedin-hooks/main.py 2>/dev/null
 ```
 
-If missing, offer to install it:
-
-```bash
-git clone https://github.com/lucagalvani-galtea/linkedin-hooks.git ~/linkedin-hooks
-pip install typer rich
-```
-
-Only run if the user confirms.
+If missing, skip silently — hooks will be drafted manually using the cheat sheet. Only offer to install if the user asks about it.
 
 **3. Memory file**
 
-Load the persona's memory file:
-
 ```bash
-cat ~/linkedin-memory-[persona].md 2>/dev/null
+cat ~/linkedin-memory-[slug].md 2>/dev/null
 ```
 
-Replace `[persona]` with `jorge` or `luca` based on the selection above.
+If the file exists, load it silently — use the persona profile and voice & style notes when drafting, and do not ask for writing samples again.
 
-If the file exists, load it silently — use the persona profile, voice & style notes when drafting, and do not ask for writing samples again.
+If the file does not exist (new persona), ask:
 
-If the file does not exist, ask:
+> "Do you have any existing LinkedIn posts or writing samples I can learn [name]'s voice from? Paste them here, or press Enter to skip."
 
-> "Do you have any existing LinkedIn posts or writing samples I can learn your voice from? Paste them here, or press Enter to skip."
-
-If they share samples, extract voice & style patterns (sentence length, vocabulary, structural habits, what they avoid) and create the file with the structure below. If they skip, create the file with empty sections so it's ready for confirmed posts.
+If they share samples, extract voice & style patterns and save them under `## Voice & Style Notes`. If they skip, create the file with empty sections so it's ready for confirmed posts.
 
 Do not repeat this check on subsequent invocations in the same session.
 
@@ -89,15 +79,15 @@ Do not repeat this check on subsequent invocations in the same session.
 
 ## Memory file format
 
-**Jorge:** `~/linkedin-memory-jorge.md`
-**Luca:** `~/linkedin-memory-luca.md`
+Path: `~/linkedin-memory-[slug].md`
 
 ```markdown
 # LinkedIn Writing Memory — [Name]
 
 ## Persona Profile
 - **Name:** [Name]
-- **Role:** [Role at Galtea]
+- **Role:** [Role]
+- **Company:** [Company name and what it does]
 - **Audience:** [Primary LinkedIn audience]
 - **Content focus:** [Key angles and topics]
 
@@ -107,24 +97,6 @@ Do not repeat this check on subsequent invocations in the same session.
 
 ## Confirmed Posts
 <!-- Appended after each post the user confirms as done. -->
-```
-
-Pre-fill `## Persona Profile` when creating the file:
-
-**For Jorge:**
-```
-- **Name:** Jorge
-- **Role:** Founder & CEO at Galtea
-- **Audience:** AI builders, founders, and product teams
-- **Content focus:** Company vision, founder journey, product milestones, AI landscape takes
-```
-
-**For Luca:**
-```
-- **Name:** Luca
-- **Role:** First Marketing Hire at Galtea
-- **Audience:** Marketers, GTM practitioners, AI-curious builders
-- **Content focus:** Marketing craft, GTM experiments, growth lessons, AI's impact on marketing
 ```
 
 ### How to update the memory file
@@ -163,7 +135,7 @@ Each week targets five post types.
 
 ## Workflow
 
-The default mode is **weekly planning**: run the Content Mine interview, map the output to a 3-4 post week plan, then draft each post in order. This is the right flow for most sessions.
+The default mode is **weekly planning**: run the Weekly Extraction interview, map the output to a 3-4 post week plan, then draft each post in order. This is the right flow for most sessions.
 
 Only skip to a single post if the user explicitly asks to write one specific post right now.
 
@@ -173,13 +145,13 @@ Ask:
 
 > "Want to plan your full week of content? I'll interview you about your week and we'll map out 3-4 posts. Or if you already have a specific topic, just tell me and we'll write that."
 
-**If they want the full week plan:** run the Content Mine interview, then proceed to Step 1b.
+**If they want the full week plan:** run the Weekly Extraction interview, then proceed to Step 1b.
 
 **If they have a specific topic:** ask which slot it fits and jump to Step 2.
 
 ### Step 1b — Map the week plan
 
-After the Content Mine interview, present the 5 ideas and immediately follow with a **week plan**: select the best 3-4 ideas, assign each a slot and PPP type, and propose a drafting order. Format it like this:
+After the Weekly Extraction interview, present the 5 ideas and immediately follow with a **week plan**: select the best 3-4 ideas, assign each a slot and PPP type, and propose a drafting order. Format it like this:
 
 ```
 ## Your week — [dates or "this week"]
@@ -199,11 +171,9 @@ Aim for:
 
 Then ask: "Want to start drafting? I'll go through them one by one."
 
-### Step 2 — Draft each post (one at a time)
-
 ---
 
-## Content Mine — Weekly Extraction Interview
+## Weekly Extraction — Interview
 
 Run this when the user doesn't have a topic ready. The goal is to surface content ideas from their real work week. Most professionals sit on a goldmine of insights but don't see it because it all feels "obvious" to them. Your job is to help them see what their audience would find valuable.
 
@@ -218,57 +188,61 @@ By the end, the user should feel a shift: from "I have nothing to say" to "I act
 - **Budget: ~8 questions total** (6 starters + ~2 follow-ups). Don't burn follow-ups on dry areas.
 - If the user types **STOP**, immediately skip to the output with whatever you have.
 
+### Role-based framing
+
+Before running the interview, read the persona's role and content focus from their profile. Use these to adapt question framing:
+
+- **Founders / CEOs / CTOs:** Lean toward product decisions, company vision, builder perspective
+- **Marketing / GTM / Growth roles:** Lean toward campaigns, experiments, distribution, marketing craft
+- **Other roles:** Use the content focus from the persona profile as the primary lens
+
+The questions below include role-specific variants where the framing meaningfully differs. Use the variant that fits. For roles that don't match either variant, adapt using the persona's stated content focus.
+
 ### The 6 questions
-
-Each question maps directly to one or more post slots. Use the variant that matches the active persona.
-
----
 
 **1. Product**
 
-*Jorge:* "Anything ship, launch, or change at Galtea this week? New feature, article, milestone — anything worth telling your audience about?"
+*Founder / builder:* "Anything ship, launch, or change at [company] this week? New feature, article, milestone — anything worth telling your audience about?"
 
-*Luca:* "Anything you shipped, tested, or launched on the marketing side this week? A campaign, a piece of content, an experiment — anything worth talking about?"
+*Marketing / GTM:* "Anything you shipped, tested, or launched on the marketing side this week? A campaign, a piece of content, an experiment — anything worth talking about?"
 
 ---
 
 **2. Company culture**
 
-*Both:* "Any team news this week? New hire, a win worth celebrating, an event, a partnership — anything that happened with the people around you?"
+"Any team news this week? New hire, a win worth celebrating, an event, a partnership — anything that happened with the people around you?"
 
 ---
 
 **3. Personal brand (work)**
 
-*Jorge:* "What was the hardest or most interesting thing you dealt with at work this week? A decision, a conversation, a problem — walk me through it."
+*Founder / builder:* "What was the hardest or most interesting thing you dealt with at work this week? A decision, a conversation, a problem — walk me through it."
 
-*Luca:* "What was the most interesting marketing or GTM challenge you worked on this week? A message that wasn't landing, a test you ran, a decision you made — walk me through it."
+*Marketing / GTM:* "What was the most interesting marketing or GTM challenge you worked on this week? A message that wasn't landing, a test you ran, a decision you made — walk me through it."
 
 ---
 
 **4. Personal brand (life)**
 
-*Both:* "Anything happen outside work this week — something you did, experienced, or observed — that made you think differently about your work or the world?"
+"Anything happen outside work this week — something you did, experienced, or observed — that made you think differently about your work or the world?"
 
 ---
 
 **5. AI landscape**
 
-*Jorge:* "What's one thing you read, heard, or reacted to in AI this week — an article, a product, a take — that you actually had an opinion on?"
+*Founder / builder:* "What's one thing you read, heard, or reacted to in AI this week — an article, a product, a take — that you actually had an opinion on?"
 
-*Luca:* "What's one thing in AI you reacted to this week — especially anything changing how marketing, distribution, or GTM works — that you actually had a take on?"
+*Marketing / GTM:* "What's one thing in AI you reacted to this week — especially anything changing how marketing, distribution, or GTM works — that you actually had a take on?"
 
 ---
 
 **6. Repost / curation**
 
-*Jorge:* "Anything you came across this week — a post, a resource, a tool — that you'd recommend to the people you're trying to reach?"
-
-*Luca:* "Anything you came across this week — a marketing framework, a growth case study, an AI tool — that you'd recommend to other marketers or builders?"
+"Anything you came across this week — a post, a resource, a tool — that you'd recommend to the people you're trying to reach?"
 
 ---
 
-### Content Mine output
+### Weekly Extraction output
 
 Once the interview is done (or STOP), generate **5 content ideas** using this structure for each:
 
@@ -296,7 +270,7 @@ For each post in the week plan, go through this flow sequentially. After one pos
 
 ### Gather raw material
 
-If the post came from the Content Mine interview, the raw material is already there — use it. Only ask follow-up questions if something specific is missing (a number, a name, a key detail).
+If the post came from the Weekly Extraction interview, the raw material is already there — use it. Only ask follow-up questions if something specific is missing (a number, a name, a key detail).
 
 If the post is on a topic the user brought in directly, ask short targeted questions to pull out the substance. Don't write anything until you have enough signal. For each type:
 
@@ -332,11 +306,7 @@ Structure of a LinkedIn post:
 2. **Body** (3–8 lines) — delivers the substance
 3. **Close** (1–2 lines, optional) — a thought, a question, a next step
 
-**Hook:** Use the hooks generator for options when a strong opening matters. Run:
-```bash
-cd ~/linkedin-hooks && python main.py
-```
-Or draft a hook directly using the behavioral levers below.
+**Hook:** Use the hooks generator if available (`cd ~/linkedin-hooks && python main.py`), or draft directly using the cheat sheet below.
 
 **Body writing rules (apply to the whole post):**
 - No AI-sounding phrases: "game-changer", "leverage", "delve", "navigate", "crucial", "pivotal", "in today's world", "Here's the thing:", "At the end of the day"
@@ -472,7 +442,7 @@ Every post also falls into one of three strategic types. Use this to make sure t
 - Soft mention of your offer is fine ("the system my clients use")
 - Common mistakes: hook doesn't speak to ICP, too broad, not specific enough to be applicable
 - Maps to: **product**, **company culture** slots
-- Hook style: lead with a specific result or surprising outcome ("My client got 3 leads with one change")
+- Hook style: lead with a specific result or surprising outcome
 
 ### Promo posts
 - Direct call to action — what you offer, who it's for, why now
@@ -506,9 +476,7 @@ If the user has a launch or wants inbound leads, prioritize the Promo slot. If t
 
 ## Notes
 
-- The hooks generator lives at `~/linkedin-hooks/` — use it when the opening isn't landing
-- Both personas are writing about Galtea (AI product testing and evaluation platform)
-- Jorge's audience: AI builders, founders, and product teams
-- Luca's audience: Marketers, GTM practitioners, and AI-curious builders
 - Weekly cadence: aim for all 5 slots, but 3 strong posts beat 5 weak ones
-- Memory files: `~/linkedin-memory-jorge.md` and `~/linkedin-memory-luca.md`
+- Persona memory files live at `~/linkedin-memory-[slug].md`
+- Active persona is tracked in `~/linkedin-persona`
+- Hooks generator (optional): `~/linkedin-hooks/main.py`
