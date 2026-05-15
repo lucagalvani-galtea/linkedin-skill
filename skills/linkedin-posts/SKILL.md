@@ -90,15 +90,43 @@ Each week targets five post types.
 
 ## Workflow
 
-### Step 1 — Identify the post type or mine the week
+The default mode is **weekly planning**: run the Content Mine interview, map the output to a 3-4 post week plan, then draft each post in order. This is the right flow for most sessions.
 
-Ask the user:
+Only skip to a single post if the user explicitly asks to write one specific post right now.
 
-> "Do you already have a topic in mind, or would you like me to interview you about your week to find one?"
+### Step 1 — Mine the week or jump to a topic
 
-**If they have a topic:** ask which slot it fits and proceed to Step 2.
+Ask:
 
-**If they don't have a topic** (or say things like "I don't know what to write", "nothing interesting happened", "help me find content"): run the Content Mine interview below, then use the output to pick the best-fit slot and proceed to Step 2 with the chosen idea as the raw material.
+> "Want to plan your full week of content? I'll interview you about your week and we'll map out 3-4 posts. Or if you already have a specific topic, just tell me and we'll write that."
+
+**If they want the full week plan:** run the Content Mine interview, then proceed to Step 1b.
+
+**If they have a specific topic:** ask which slot it fits and jump to Step 2.
+
+### Step 1b — Map the week plan
+
+After the Content Mine interview, present the 5 ideas and immediately follow with a **week plan**: select the best 3-4 ideas, assign each a slot and PPP type, and propose a drafting order. Format it like this:
+
+```
+## Your week — [dates or "this week"]
+
+| # | Slot | PPP type | Hook (idea) |
+|---|---|---|---|
+| 1 | Personal brand | Perspective | [hook from idea] |
+| 2 | Product | Proof | [hook from idea] |
+| 3 | AI landscape | Perspective | [hook from idea] |
+| 4 | Company culture | Proof | [hook from idea] |
+```
+
+Aim for:
+- 2 Perspective posts (personal brand, AI landscape)
+- 1-2 Proof posts (product, company culture)
+- Promo only if there's a launch or active offer
+
+Then ask: "Want to start drafting? I'll go through them one by one."
+
+### Step 2 — Draft each post (one at a time)
 
 ---
 
@@ -167,9 +195,13 @@ After presenting the 5 ideas, ask: "Which of these do you want to turn into a po
 
 ---
 
-### Step 2 — Gather raw material
+For each post in the week plan, go through this flow sequentially. After one post is confirmed or skipped, move to the next automatically — don't wait for the user to prompt you.
 
-Ask short, direct questions to pull out the real substance. Don't write anything until you have enough signal. For each type:
+### Gather raw material
+
+If the post came from the Content Mine interview, the raw material is already there — use it. Only ask follow-up questions if something specific is missing (a number, a name, a key detail).
+
+If the post is on a topic the user brought in directly, ask short targeted questions to pull out the substance. Don't write anything until you have enough signal. For each type:
 
 **Company culture**
 - Who/what/where — name, role, event, milestone
@@ -239,12 +271,15 @@ Tone definitions:
 - **Vulnerable** — admits something most wouldn't say out loud, honest about being wrong or slow
 - **Authoritative** — leads with specifics and evidence, precise numbers, no false modesty
 
-### Step 5 — Iterate and confirm
+### Step 5 — Iterate, confirm, and move on
 
 After sharing the draft:
 - Ask if the tone, hook, or body needs adjusting
 - Offer to regenerate just the hook using the hooks generator if the opening isn't strong enough
-- When the user is happy with the post, ask: "Want me to save this to memory?" — if yes, append it to `~/linkedin-memory.md` under `## Confirmed Posts` with today's date and post type
+- When the user approves, save it to `~/linkedin-memory.md` under `## Confirmed Posts` with today's date and post type
+- Then immediately move to the next post in the week plan: "Post [N] done. Ready for post [N+1]? Here's what we planned: [slot] — [hook]"
+
+Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 polished one.
 
 ## Post type templates
 
