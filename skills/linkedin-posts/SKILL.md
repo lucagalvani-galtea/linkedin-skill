@@ -138,38 +138,34 @@ By the end, the user should feel a shift: from "I have nothing to say" to "I act
 
 ### Interview rules
 
-- Ask **one question at a time**. Acknowledge their answer briefly before moving on.
-- If they give a rich answer, flag the gold: "There's definitely a post in there." Then move on.
-- If they give a flat "nothing really" answer, probe once with a more specific version. If still nothing, move on. Never push twice.
-- Push for specifics. If they say "I had a tough conversation," ask what made it tough, what was said, what happened. Generic answers produce generic ideas.
-- **Budget: ~12 questions total** (8 starters + ~4 follow-ups). Don't burn follow-ups on dry territories.
-- If the user types **STOP** at any point, immediately skip to the output with whatever material you have.
+- Ask **one question at a time**. Acknowledge the answer briefly before moving on.
+- Flag good material: "There's a post in there." Then move on.
+- If an answer is flat, probe once with a more specific version. If still nothing, move on. Never push twice.
+- Push for specifics — generic answers produce generic posts.
+- **Budget: ~8 questions total** (6 starters + ~2 follow-ups). Don't burn follow-ups on dry areas.
+- If the user types **STOP**, immediately skip to the output with whatever you have.
 
-### The 8 territories
+### The 6 questions
 
-**1. Conversations**
-"Think about the conversations you had this week — with colleagues, clients, your team. Did any of them spark a thought? Maybe a question someone asked that surprised you, or a pattern you noticed across multiple conversations?"
+Each question maps directly to one or more post slots.
 
-**2. Events & News**
-"What actually happened at work this week? Any meetings that mattered, decisions made, launches, shifts in direction?"
+**1. Product**
+"Anything ship, launch, or change at Galtea this week? New feature, article, milestone — anything worth telling your audience about?"
 
-**3. The Hard Problem**
-"What was the hardest thing you dealt with this week, professionally? Walk me through it — what happened and how did you handle it?"
+**2. Company culture**
+"Any team news this week? New hire, a win worth celebrating, an event, a partnership — anything that happened with the people around you?"
 
-**4. Processes & Tactics**
-"Did you create or update any documents, processes, templates, or workflows? Anything you built that helped you or your team work better?"
+**3. Personal brand (work)**
+"What was the hardest or most interesting thing you dealt with at work this week? A decision, a conversation, a problem — walk me through it."
 
-**5. Learning & Mind Changes**
-"Did you learn something new this week? Or change your mind about something you used to believe?"
+**4. Personal brand (life)**
+"Anything happen outside work this week — something you did, experienced, or observed — that made you think differently about your work or the world?"
 
-**6. Contrarian Take**
-"Was there a 'best practice' or common piece of advice you heard this week that you actually disagree with?"
+**5. AI landscape**
+"What's one thing you read, heard, or reacted to in AI this week — an article, a product, a take — that you actually had an opinion on?"
 
-**7. Values & Boundaries**
-"Did you say 'No' to anything this week? A project, a client, a meeting, a request? What was it and why?"
-
-**8. Curation**
-"What's one thing you read, watched, or listened to this week that you found yourself telling someone else about?"
+**6. Repost / curation**
+"Anything you came across this week — a post, a resource, a tool — that you'd recommend to the people you're trying to reach?"
 
 ### Content Mine output
 
@@ -191,7 +187,7 @@ Once the interview is done (or STOP), generate **5 content ideas** using this st
 - Every idea must reference something the user actually said — no invented details.
 - The hook must be strong enough to stop a scroll.
 
-After presenting the 5 ideas, ask: "Which of these do you want to turn into a post?" Then proceed to Step 2 with that idea as the raw material.
+After presenting the 5 ideas, proceed directly to Step 1b — map the week plan using the ideas. Don't ask the user to pick one first; propose the full plan and let them adjust.
 
 ---
 
