@@ -1,7 +1,7 @@
 ---
 name: linkedin-posts
-description: Help a founder plan and write LinkedIn posts following a weekly content mix: company culture, personal brand, AI landscape, reposts, and product updates.
-when_to_use: Invoke when the user wants to write, plan, or brainstorm LinkedIn posts. Trigger phrases include "linkedin post", "write a post", "post ideas", "weekly content", "founder post", "what should I post".
+description: "Help a founder plan and write LinkedIn posts following a weekly content mix: company culture, personal brand, AI landscape, reposts, and product updates."
+when_to_use: "Invoke when the user wants to write, plan, or brainstorm LinkedIn posts. Trigger phrases include: linkedin post, write a post, post ideas, weekly content, founder post, what should I post."
 ---
 
 # LinkedIn Posts
