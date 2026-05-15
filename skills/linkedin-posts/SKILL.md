@@ -6,7 +6,7 @@ when_to_use: "Invoke when the user wants to write, plan, or brainstorm LinkedIn 
 
 # LinkedIn Posts
 
-This skill helps any professional plan and write their weekly LinkedIn content. It supports multiple personas — each with their own voice profile, memory file, and interview framing — and integrates with the local hooks generator at `~/linkedin-hooks/` when a strong opening is needed.
+This skill helps any professional plan and write their weekly LinkedIn content. It supports multiple personas — each with their own voice profile and memory file — and generates hooks natively using behavioral psychology frameworks.
 
 ## Persona System
 
@@ -22,7 +22,7 @@ Multiple personas are supported. The active one is tracked in `~/linkedin-person
 
 ## Setup check
 
-When this skill is first invoked, run all three checks before doing anything else.
+When this skill is first invoked, run both checks before doing anything else.
 
 **1. Persona selection**
 
@@ -51,15 +51,7 @@ Ask all five questions at once. Wait for answers, then:
 
 **Switching personas:** If the user explicitly asks to switch ("write for [name] instead"), update `~/linkedin-persona` to that slug and load their memory file. Run the creation flow if that persona doesn't exist yet.
 
-**2. Hooks generator**
-
-```bash
-ls ~/linkedin-hooks/main.py 2>/dev/null
-```
-
-If missing, skip silently — hooks will be drafted manually using the cheat sheet. Only offer to install if the user asks about it.
-
-**3. Memory file**
+**2. Memory file**
 
 ```bash
 cat ~/linkedin-memory-[slug].md 2>/dev/null
@@ -196,7 +188,7 @@ Before running the interview, read the persona's role and content focus from the
 - **Marketing / GTM / Growth roles:** Lean toward campaigns, experiments, distribution, marketing craft
 - **Other roles:** Use the content focus from the persona profile as the primary lens
 
-The questions below include role-specific variants where the framing meaningfully differs. Use the variant that fits. For roles that don't match either variant, adapt using the persona's stated content focus.
+The questions below include role-specific variants where the framing meaningfully differs. Use the variant that fits.
 
 ### The 6 questions
 
@@ -262,11 +254,13 @@ Once the interview is done (or STOP), generate **5 content ideas** using this st
 - Every idea must reference something the user actually said — no invented details.
 - The hook must be strong enough to stop a scroll.
 
-After presenting the 5 ideas, proceed directly to Step 1b — map the week plan using the ideas. Don't ask the user to pick one first; propose the full plan and let them adjust.
+After presenting the 5 ideas, proceed directly to Step 1b — map the week plan. Don't ask the user to pick one first; propose the full plan and let them adjust.
 
 ---
 
-For each post in the week plan, go through this flow sequentially. After one post is confirmed or skipped, move to the next automatically — don't wait for the user to prompt you.
+## Drafting flow
+
+For each post in the week plan, go through this flow sequentially. After one post is confirmed or skipped, move to the next automatically.
 
 ### Gather raw material
 
@@ -299,27 +293,18 @@ If the post is on a topic the user brought in directly, ask short targeted quest
 - Who it's for and what problem it solves
 - Any metric, number, or before/after that makes it tangible
 
-### Step 3 — Draft the full post
+### Draft the full post
 
 Structure of a LinkedIn post:
 1. **Hook** (1–3 lines) — stops the scroll
 2. **Body** (3–8 lines) — delivers the substance
 3. **Close** (1–2 lines, optional) — a thought, a question, a next step
 
-**Hook:** Use the hooks generator if available (`cd ~/linkedin-hooks && python main.py`), or draft directly using the cheat sheet below.
-
-**Body writing rules (apply to the whole post):**
-- No AI-sounding phrases: "game-changer", "leverage", "delve", "navigate", "crucial", "pivotal", "in today's world", "Here's the thing:", "At the end of the day"
-- No parallel bullet structures where every line is the same length
-- No question bait at the end ("What do you think?", "Drop a comment")
-- Use fragments deliberately. Vary sentence length.
-- Odd specific numbers beat round estimates ("17 days" not "a few weeks")
-- State opinions as facts. No "I think" or "In my opinion".
-- Contractions are fine. Imperfect grammar is fine when it serves rhythm.
+**Hook:** Generate 5 hook variants using the Hook Generation framework below. Present them and let the user pick or ask for iterations before writing the body.
 
 **Close:** End on a statement, not a question. If there's a CTA, make it specific ("Link in comments" or nothing at all).
 
-### Step 4 — Tone
+### Tone
 
 Default tone by post type unless the persona specifies otherwise:
 
@@ -331,22 +316,144 @@ Default tone by post type unless the persona specifies otherwise:
 | Repost | Conversational |
 | Product | Direct or Authoritative |
 
-Tone definitions:
-- **Direct** — short sentences, flat opinions, no hedging, no warmup
-- **Conversational** — like texting a smart friend, contractions, thinks out loud
-- **Provocative** — picks a fight with conventional wisdom, no softening, lets the claim hang
-- **Vulnerable** — admits something most wouldn't say out loud, honest about being wrong or slow
-- **Authoritative** — leads with specifics and evidence, precise numbers, no false modesty
-
-### Step 5 — Iterate, confirm, and move on
+### Iterate, confirm, and move on
 
 After sharing the draft:
 - Ask if the tone, hook, or body needs adjusting
-- Offer to regenerate just the hook using the hooks generator if the opening isn't strong enough
 - When the user approves, save it to the persona's memory file under `## Confirmed Posts` with today's date and post type
-- Then immediately move to the next post in the week plan: "Post [N] done. Ready for post [N+1]? Here's what we planned: [slot] — [hook]"
+- Then immediately move to the next post: "Post [N] done. Ready for post [N+1]? Here's what we planned: [slot] — [hook]"
 
 Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 polished one.
+
+---
+
+## Hook Generation
+
+Generate hooks natively using this framework. No external tool needed.
+
+### How to generate hooks
+
+When a hook is needed for a post:
+
+1. **Infer** topic and audience from context. Ask only if something critical is missing.
+2. **Identify the content goal** from the post's slot and PPP type:
+   - Perspective posts (personal brand, AI landscape) → `thought_leadership` or `engagement`
+   - Proof posts (product, company culture) → `save_worthy` or `audience_growth`
+   - Promo posts → `engagement`
+3. **Use the default tone** for the post type (or the persona's preference if stated).
+4. **Generate 5 variants**, one per lever, using the framework below. Each must pass all 3 brain gates.
+5. **Present them** in this format, then offer to regenerate specific ones.
+
+### Output format
+
+```
+**Hook 1** — Curiosity Gap · [Surface/Social/Core]
+[hook text]
+Best for: [goal] | ⚠ [warning, or omit if none]
+
+**Hook 2** — Loss Framing · [Surface/Social/Core]
+[hook text]
+Best for: [goal] | ⚠ [warning, or omit if none]
+
+[...repeat for all 5 levers...]
+```
+
+After presenting all 5: "Which hook are you going with? Or I can rework specific ones — just give me the number and any direction."
+
+### Regeneration loop
+
+When the user asks to rework a hook:
+- Note which slots to redo and any specific instruction ("more direct", "try loss framing", "less generic")
+- Generate new variants only for those slots — meaningfully different from the existing ones
+- Highlight the new hooks clearly
+- Repeat until the user picks one or moves on
+
+### The 3 brain gates
+
+Every hook must pass these three gates, which fire in the first 300ms of reading before any conscious decision:
+
+**Gate 1 — Pattern Recognition (0–100ms)**
+Does this look like marketing? Generic hooks, corporate tone, and templates trigger instant dismissal.
+Fix: be *unexpectedly familiar* — recognizable structure, unexpected angle.
+Avoid: buzzwords, listicle openers without a specific claim, vague inspiration.
+
+**Gate 2 — Identity Match (100–200ms)**
+Is this for someone like me? Three identity layers, in order of depth:
+- **Surface** — job title, industry, role → earns a glance
+- **Social** — shared tribal experiences, group struggles → earns a share
+- **Core** — values, beliefs, worldview → earns advocacy
+
+Most hooks only hit Surface. The strongest hit Social or Core — they articulate what an audience already believes but has never seen written out loud.
+
+**Gate 3 — Value Prediction (200–300ms)**
+Is reading this worth the effort? Loss framing and curiosity gaps are the two most reliable mechanisms — both signal: "the cost of NOT reading is higher than the cost of reading."
+
+### The 5 psychological levers
+
+**1. Curiosity Gap**
+Create a knowledge tension the brain needs to resolve. Contradict an assumption, expose a hidden pattern, or name something unnamed. Do not resolve the tension in the hook — let it hang.
+Pattern: `"Everyone does X. They're wrong."` / `"X is not what you think it is."`
+
+**2. Loss Framing**
+Loss feels urgent; gain feels optional. Frame around what the reader is losing, missing, or getting wrong.
+Pattern: `"You're leaving [outcome] on the table."` / `"Most [group] never notice [cost]."`
+
+**3. Identity Mirroring**
+Articulate the unspoken belief, frustration, or experience of the target tribe. The reader should feel "this person gets it" — not just "this is relatable."
+Distinction: relatable = about them. Identity mirroring = about their worldview.
+Pattern: `"The reason [group] struggles with X isn't [obvious reason]."`
+
+**4. Pattern Interrupt**
+Contradict the expected take on a familiar topic. Works best paired with a credible specific claim.
+Pattern: `"[Conventional wisdom]. [One-sentence reframe]."`
+
+**5. Competence Signal**
+Promise a framework, process, or mental model that makes the complex manageable. Positions the author as a useful resource worth following.
+Pattern: `"Here's the [X]-step framework for [hard thing]."`
+
+### Content goal alignment
+
+| Goal | Primary levers | Identity layer target |
+|---|---|---|
+| Thought leadership | Curiosity Gap + Pattern Interrupt | Core |
+| Audience growth | Competence Signal | Social |
+| Engagement | Identity Mirroring + Loss Framing | Social |
+| Save-worthy | Competence Signal + specific numbered claims | Surface → Social |
+
+### The Relatability Trap
+
+Flag a hook that is in the trap if:
+- It has no unique angle or claim attached
+- Anyone could have written it
+- The reader could share it without endorsing the author's perspective
+
+Fix: use shared experience as a **setup**, then deliver a take the audience hasn't heard.
+
+### Writing rules (apply to hooks and the full post)
+
+**Banned phrases — never use:**
+- "game-changer", "leverage" (as a verb), "delve", "navigate", "crucial", "pivotal"
+- "in today's world", "in today's landscape"
+- "it's not about X, it's about Y" as a formula
+- "I want to share", "I'm excited to share", "Here's the thing:", "At the end of the day"
+- "This is a reminder that", "The truth is", "Spoiler:"
+- "What do you think?" or "Drop a comment" at the end
+
+**Structural patterns that signal AI — avoid:**
+- Perfect parallel structure in every line
+- Every sentence complete and grammatically polished (fragments are human)
+- Em dashes used as a crutch every few lines
+- Motivational cadence: short punchy line. Slightly longer line. Emotional closer.
+- Round numbers that feel estimated ("thousands of")
+- Hedging opinions: "I think", "In my opinion" — state claims flat
+
+**What human writing looks like:**
+- Sentence fragments. Used deliberately.
+- Specific odd numbers (not "3 weeks", but "17 days")
+- Contractions and informal connectors (And. But. So.)
+- Dramatically varied sentence length
+- Opinions stated as facts, not offered as perspectives
+- Word choices that are slightly unexpected, not the first synonym
 
 ---
 
@@ -406,23 +513,9 @@ Keep momentum. The goal is to exit the session with 3-4 drafted posts, not 1 pol
 
 ---
 
-## Hooks cheat sheet (quick reference)
-
-Use these when drafting hooks without running the generator:
-
-| Lever | Pattern |
-|---|---|
-| Curiosity gap | "Everyone does X. They're wrong." / "X is not what you think it is." |
-| Loss framing | "You're leaving [outcome] on the table." / "Most [group] never notice [cost]." |
-| Identity mirroring | "The reason [group] struggles with X isn't [obvious reason]." |
-| Pattern interrupt | "[Conventional wisdom]. [One-sentence reframe]." |
-| Competence signal | "Here's the [X]-step framework for [hard thing]." |
-
----
-
 ## Post strategy layer — Perspective / Proof / Promo
 
-Every post also falls into one of three strategic types. Use this to make sure the weekly mix moves readers along the funnel, not just fills slots.
+Every post falls into one of three strategic types.
 
 | Type | Purpose | Reader stage | Offer visibility | Weekly target |
 |---|---|---|---|---|
@@ -439,26 +532,22 @@ Every post also falls into one of three strategic types. Use this to make sure t
 
 ### Proof posts
 - Show client results, case studies, before/after, frameworks in action
-- Soft mention of your offer is fine ("the system my clients use")
-- Common mistakes: hook doesn't speak to ICP, too broad, not specific enough to be applicable
+- Soft mention of your offer is fine
+- Common mistakes: hook doesn't speak to ICP, too broad, not specific enough
 - Maps to: **product**, **company culture** slots
 - Hook style: lead with a specific result or surprising outcome
 
 ### Promo posts
 - Direct call to action — what you offer, who it's for, why now
-- Lower organic reach but attracts inbound leads directly
 - Common mistakes: no CTA, no ICP context, too many ideas in one post
 - Maps to: **product** slot (launches, offers, sign-ups)
 - Hook style: name the transformation or the before/after for a specific person
 
 ### Applying this to the weekly mix
 
-When helping plan the week, aim for:
 - 2 Perspective posts (personal brand + AI landscape)
 - 2 Proof posts (product + company culture)
-- 1 flexible slot (repost, or a Promo if there's something to push)
-
-If the user has a launch or wants inbound leads, prioritize the Promo slot. If they're early-stage building an audience, weight toward Perspective.
+- 1 flexible slot (repost, or Promo if there's something to push)
 
 ---
 
@@ -477,6 +566,5 @@ If the user has a launch or wants inbound leads, prioritize the Promo slot. If t
 ## Notes
 
 - Weekly cadence: aim for all 5 slots, but 3 strong posts beat 5 weak ones
-- Persona memory files live at `~/linkedin-memory-[slug].md`
-- Active persona is tracked in `~/linkedin-persona`
-- Hooks generator (optional): `~/linkedin-hooks/main.py`
+- Persona memory files: `~/linkedin-memory-[slug].md`
+- Active persona: `~/linkedin-persona`
