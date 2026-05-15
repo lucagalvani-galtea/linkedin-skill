@@ -1,6 +1,6 @@
 # LinkedIn Posts Skill
 
-A Claude Code skill that helps founders plan and write their weekly LinkedIn content.
+A Claude Code skill that helps any professional plan and write their weekly LinkedIn content.
 
 ## Install
 
@@ -14,6 +14,8 @@ Type `/linkedin-posts` or say "help me write a LinkedIn post" in Claude Code.
 
 ## What it does
 
+On first run, sets up a persona profile (name, role, company, audience, content focus) — works for any person or company. Supports multiple personas, each with their own voice profile and memory file.
+
 Guides you through a weekly content mix of 5 post types:
 
 | # | Type | Examples |
@@ -24,6 +26,4 @@ Guides you through a weekly content mix of 5 post types:
 | 4 | Repost | Useful resources, ICP posts worth amplifying |
 | 5 | Product | Launches, new features, articles, carousels |
 
-For each post it asks the right questions, drafts a full post (hook + body + close), and applies tone-of-voice rules to keep writing human and sharp.
-
-Integrates with the [LinkedIn Hooks Generator](https://github.com/lucagalvani-galtea/linkedin-hooks) when a stronger opening is needed.
+For each post it runs a **Weekly Extraction** interview to surface content ideas, drafts a full post (hook + body + close), and generates 5 hook variants using behavioral psychology frameworks (curiosity gap, loss framing, identity mirroring, pattern interrupt, competence signal) — no external tools needed.
