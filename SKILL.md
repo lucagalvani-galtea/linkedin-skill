@@ -8,6 +8,23 @@ when_to_use: Invoke when the user wants to write, plan, or brainstorm LinkedIn p
 
 This skill helps the founder plan and write their weekly LinkedIn content mix. It covers all five post types, drafts full posts (not just hooks), and integrates with the local hooks generator at `~/linkedin-hooks/` when a strong opening is needed.
 
+## Setup check
+
+When this skill is first invoked, check if the hooks generator is installed:
+
+```bash
+ls ~/linkedin-hooks/main.py 2>/dev/null
+```
+
+If the file doesn't exist, tell the user and offer to set it up:
+
+```bash
+git clone https://github.com/lucagalvani-galtea/linkedin-hooks.git ~/linkedin-hooks
+pip install typer rich
+```
+
+Only run the setup if the user confirms. Once installed, proceed normally. Don't repeat this check on subsequent invocations in the same session.
+
 ## Weekly Content Mix
 
 Each week targets five post types. When the user hasn't specified, ask what's happening this week and suggest which slots are most natural to fill first.
