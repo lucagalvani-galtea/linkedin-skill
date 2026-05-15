@@ -312,11 +312,54 @@ Use these when drafting hooks without running the generator:
 | Pattern interrupt | "[Conventional wisdom]. [One-sentence reframe]." |
 | Competence signal | "Here's the [X]-step framework for [hard thing]." |
 
+## Post strategy layer — Perspective / Proof / Promo
+
+Every post also falls into one of three strategic types. Use this to make sure the weekly mix moves readers along the funnel, not just fills slots.
+
+| Type | Purpose | Reader stage | Offer visibility | Weekly target |
+|---|---|---|---|---|
+| **Perspective** | Build authority and attract peers | Cold → warm | None | 2/week |
+| **Proof** | Build trust and belief, show results | Warm → want more | Soft | 2/week |
+| **Promo** | Trigger action from ready buyers | Hot | Explicit | Occasional |
+
+### Perspective posts
+- Share lived experience, opinions, contrarian takes, personal stories
+- No explicit mention of what you sell — authority builds through the voice, not the pitch
+- Common mistakes: no specifics, no lived reality, sounds like a generic thought leader
+- Maps to: **personal brand**, **AI landscape** slots
+- Hook style: start with a situation or confession, not a lesson
+
+### Proof posts
+- Show client results, case studies, before/after, frameworks in action
+- Soft mention of your offer is fine ("the system my clients use")
+- Common mistakes: hook doesn't speak to ICP, too broad, not specific enough to be applicable
+- Maps to: **product**, **company culture** slots
+- Hook style: lead with a specific result or surprising outcome ("My client got 3 leads with one change")
+
+### Promo posts
+- Direct call to action — what you offer, who it's for, why now
+- Lower organic reach but attracts inbound leads directly
+- Common mistakes: no CTA, no ICP context, too many ideas in one post
+- Maps to: **product** slot (launches, offers, sign-ups)
+- Hook style: name the transformation or the before/after for a specific person
+
+### Applying this to the weekly mix
+
+When helping plan the week, aim for:
+- 2 Perspective posts (personal brand + AI landscape)
+- 2 Proof posts (product + company culture)
+- 1 flexible slot (repost, or a Promo if there's something to push)
+
+If the user has a launch or wants inbound leads, prioritize the Promo slot. If they're early-stage building an audience, weight toward Perspective.
+
 ## What to avoid
 
 - Generic culture posts ("So proud of our amazing team!")
 - AI landscape takes that don't commit ("It's complicated, but...")
 - Product posts that describe features instead of outcomes
+- Perspective posts with no specifics — "no lived reality" is the #1 failure mode
+- Proof posts where the hook doesn't speak directly to the ICP
+- Promo posts with no CTA or too many ideas
 - Any hook that could have been written by anyone
 
 ## Notes
